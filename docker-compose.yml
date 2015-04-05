@@ -16,6 +16,5 @@ kandan:
     - postgresql:postgresql
   volumes:
     - /var/log/kandan:/var/log/kandan
-    - /var/run/kandan:/var/run/kandan
   ports:
     - 3000:3000
