@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 source /opt/build-config
 
@@ -80,9 +80,9 @@ DB_NAME=${DB_NAME:-kandan_production}
 DB_USER=${DB_USER:-root}
 
 # configure database
-if [ "${DB_TYPE}" == "postgres" ]; then
-
- cat > ${INSTALL_DIR}/kandan/config/database.yml << __EOL0__
+case "${DB_TYPE}" in
+  postgres)
+     cat > ${INSTALL_DIR}/kandan/config/database.yml << __EOL0__
 production:
   adapter: postgresql
   timeout: 5000
@@ -93,10 +93,10 @@ production:
   username: ${DB_USER}
   password: ${DB_PASS}
 __EOL0__
+     ;;
+  mysql)
 
-elif [ "${DB_TYPE}" == "mysql" ]; then
-
-cat > ${INSTALL_DIR}/kandan/config/database.yml << __EOL1__
+     cat > ${INSTALL_DIR}/kandan/config/database.yml << __EOL1__
 production:
   adapter: mysql2
   reconnect: false
@@ -108,11 +108,12 @@ production:
   username: ${DB_USER}
   password: ${DB_PASS}
 __EOL1__
-
-else
-  echo "Invalid database type: '$DB_TYPE'. Supported choices: [mysql, postgres]."
-  exit 1
-fi
+    ;;
+  *)
+    echo "Invalid database type: '$DB_TYPE'. Supported choices: [mysql, postgres]."
+    exit 1
+    ;;
+esac
 
 if [ ! -f ${INSTALL_DIR}/kandan/hubot-key ]; then
   cd ${INSTALL_DIR}/kandan

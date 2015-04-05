@@ -4,7 +4,7 @@ postgresql:
     - POSTGRES_PASSWORD=hogefuga
     - POSTGRES_USER=kandan
   volumes:
-    - /opt/postgresql/data:/var/lib/postgresql
+    - /opt/postgresql/data:/var/lib/postgresql/data
 kandan:
   image: miurahr/kandan
   environment:
