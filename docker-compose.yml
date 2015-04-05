@@ -1,16 +1,15 @@
 postgresql:
-  image: sameersbn/postgresql:9.4
+  image: postgres:9.4
   environment:
-    - DB_USER=kandan
-    - DB_PASS=hogehoge
-    - DB_NAME=kandan_production
+    - POSTGRES_PASSWORD=hogefuga
+    - POSTGRES_USER=kandan
   volumes:
     - /opt/postgresql/data:/var/lib/postgresql
 kandan:
   image: miurahr/kandan
   environment:
     - DB_USER=kandan
-    - DB_PASS=hogehoge
+    - DB_PASS=hogefuga
     - DB_NAME=kandan_production
   links:
     - postgresql:postgresql
