@@ -117,11 +117,13 @@ esac
 
 if [ ! -f ${INSTALL_DIR}/kandan/hubot-key ]; then
   cd ${INSTALL_DIR}/kandan
-  sudo -u kandan -E bundle exec rake db:create db:migrate kandan:bootstrap
-  sudo -u kandan -E bundle exec rake assets:precompile
-  sudo -u kandan -E bundle exec rake kandan:boot_hubot
-  sudo -u kandan -E bundle exec rake kandan:hubot_access_key | grep -oP "(?<=Your hubot access key is )[^ ]*" > hubot-key
+  RAILS_ENV=production
+  su -l kandan -c "bundle exec rake db:create db:migrate kandan:bootstrap RAILS_ENV=production"
+  su -l kandan -c "bundle exec rake assets:precompile RAILS_ENV=production"
+  su -l kandan -c "bundle exec rake kandan:boot_hubot RAILS_ENV=production"
+  su -l kandan -c "bundle exec rake kandan:hubot_access_key RAILS_ENV=production | grep -oP "(?<=Your hubot access key is )[^ ]*" > hubot-key"
 fi
+HUBOT_KEY=`cat ${INSTALL_DIR}/kandan/hubot-key`
 
 appStart () {
   # notify hubot key

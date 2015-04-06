@@ -29,7 +29,7 @@ apt-get -y install \
 apt-get -y install \
   libpq5 sqlite3 libmysqlclient18 \
   libcurl3 libcurl3-nss libpcre3 libxml2 libxslt1.1 \
-  libreadline5 \
+  libreadline5 libyaml-0-2\
   libmysqlclient-dev libsqlite3-dev libpq-dev \
   libcurl4-openssl-dev libpcre3-dev libxml2-dev libxslt-dev \
   libreadline-gplv2-dev
@@ -45,6 +45,7 @@ fi
 # populate ${KANDAN_CONF}
 cat > ${KANDAN_CONF} <<__EOL__
 [program:kandan]
+command=/opt/rbenv/shims/bundle exec thin start -e production
 command=${INSTALL_DIR}/bin/kandan
 autostart=true
 autorestart=false
@@ -52,6 +53,7 @@ username=${RUN_USER}
 directory=${INSTALL_DIR}
 stdout_logfile=${LOG_DIR}/%(program_name)s.log
 stderr_logfile=${LOG_DIR}/%(program_name)s.log
+environment=RBENV_ROOT=/opt/rbenv
 __EOL__
 
 # install
@@ -61,6 +63,8 @@ cd kandan
 git checkout i18n
 
 gem install execjs
+gem install guard
+gem install mysql2 # force install for mysql
 bundle install --without development,test
 
 sed -ri 's/config.serve_static_assets = false/config.serve_static_assets = true/g' ${INSTALL_DIR}/kandan/config/environments/production.rb
