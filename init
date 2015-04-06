@@ -1,12 +1,11 @@
 #!/bin/bash
 
-source /opt/build-config
+. /etc/profile.d/rbenv.sh
+BUNDLE=`which bundle`
+. /opt/build-config
 
 LOG_DIR=${LOG_DIR:-"/var/log/kandan"}
 INSTALL_DIR=${INSTALL_DIR:-"/home/kandan"}
-
-source /etc/profile.d/rbenv.sh
-BUNDLE=`which bundle`
 
 DB_HOST=${DB_HOST:-}
 DB_PORT=${DB_PORT:-}

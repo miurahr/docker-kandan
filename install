@@ -1,9 +1,9 @@
-#! /bin/bash
+#!/bin/bash
 set -e
 
-source /etc/profile.d/rbenv.sh
-BUNDLE=`which BUNDLE`
-source /opt/build-config
+. /etc/profile.d/rbenv.sh
+BUNDLE=`which bundle`
+. /opt/build-config
 
 INSTALL_DIR=${INSTALL_DIR:-/home/kandan}
 RUN_USER=${RUN_USER:-kandan}
