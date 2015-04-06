@@ -1,8 +1,8 @@
 postgresql:
-  image: postgres:9.4
+  image: sameersbn/postgresql:9.4
   environment:
-    - POSTGRES_PASSWORD=hogefuga
-    - POSTGRES_USER=kandan
+    - DB_PASS=hogefuga
+    - DB_USER=kandan
 kandan:
   image: miurahr/kandan
   environment:

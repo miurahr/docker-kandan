@@ -2,6 +2,7 @@
 set -e
 
 source /etc/profile.d/rbenv.sh
+BUNDLE=`which BUNDLE`
 source /opt/build-config
 
 INSTALL_DIR=${INSTALL_DIR:-/home/kandan}
@@ -26,14 +27,15 @@ apt-get -y install \
   make
 
 # install dependency
-apt-get -y install \
+curl -sL https://deb.nodesource.com/setup | bash -
+apt-get -y install nodejs \
   libpq5 sqlite3 libmysqlclient18 \
   libcurl3 libcurl3-nss libpcre3 libxml2 libxslt1.1 \
   libreadline5 libyaml-0-2\
   libmysqlclient-dev libsqlite3-dev libpq-dev \
   libcurl4-openssl-dev libpcre3-dev libxml2-dev libxslt-dev \
   libreadline-gplv2-dev
-
+npm update -g npm
 # move supervisord.log file to ${LOG_DIR}
 sed 's|^logfile=.*|logfile='"${LOG_DIR}"'/supervisord.log ;|' -i /etc/supervisor/supervisord.conf
 
@@ -45,15 +47,14 @@ fi
 # populate ${KANDAN_CONF}
 cat > ${KANDAN_CONF} <<__EOL__
 [program:kandan]
-command=/opt/rbenv/shims/bundle exec thin start -e production
-command=${INSTALL_DIR}/bin/kandan
+command=${BUNDLE} exec thin start -e production
 autostart=true
 autorestart=false
 username=${RUN_USER}
 directory=${INSTALL_DIR}
 stdout_logfile=${LOG_DIR}/%(program_name)s.log
 stderr_logfile=${LOG_DIR}/%(program_name)s.log
-environment=RBENV_ROOT=/opt/rbenv
+environment=RBENV_ROOT=${RBENV_ROOT}
 __EOL__
 
 # install
@@ -63,7 +64,6 @@ cd kandan
 git checkout i18n
 
 gem install execjs
-gem install guard
 gem install mysql2 # force install for mysql
 bundle install --without development,test
 

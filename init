@@ -5,6 +5,9 @@ source /opt/build-config
 LOG_DIR=${LOG_DIR:-"/var/log/kandan"}
 INSTALL_DIR=${INSTALL_DIR:-"/home/kandan"}
 
+source /etc/profile.d/rbenv.sh
+BUNDLE=`which bundle`
+
 DB_HOST=${DB_HOST:-}
 DB_PORT=${DB_PORT:-}
 DB_NAME=${DB_NAME:-}
@@ -117,13 +120,14 @@ esac
 
 if [ ! -f ${INSTALL_DIR}/kandan/hubot-key ]; then
   cd ${INSTALL_DIR}/kandan
-  RAILS_ENV=production
-  su -l kandan -c "bundle exec rake db:create db:migrate kandan:bootstrap RAILS_ENV=production"
-  su -l kandan -c "bundle exec rake assets:precompile RAILS_ENV=production"
-  su -l kandan -c "bundle exec rake kandan:boot_hubot RAILS_ENV=production"
-  su -l kandan -c "bundle exec rake kandan:hubot_access_key RAILS_ENV=production | grep -oP "(?<=Your hubot access key is )[^ ]*" > hubot-key"
+  sudo -u kandan ${BUNDLE} exec rake db:create db:migrate kandan:bootstrap RAILS_ENV=production
+  sudo -u kandan ${BUNDLE} exec rake assets:precompile RAILS_ENV=production
+  sudo -u kandan ${BUNDLE} exec rake kandan:boot_hubot RAILS_ENV=production
+  sudo -u kandan ${BUNDLE} exec rake kandan:hubot_access_key RAILS_ENV=production | grep -oP "(?<=Your hubot access key is )[^ ]*" > hubot-key
 fi
-HUBOT_KEY=`cat ${INSTALL_DIR}/kandan/hubot-key`
+
+# export key for docker linkage
+export HUBOT_KEY=`cat ${INSTALL_DIR}/kandan/hubot-key`
 
 appStart () {
   # notify hubot key
