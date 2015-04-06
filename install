@@ -51,7 +51,7 @@ command=${BUNDLE} exec thin start -e production
 autostart=true
 autorestart=false
 username=${RUN_USER}
-directory=${INSTALL_DIR}
+directory=${INSTALL_DIR}/kandan
 stdout_logfile=${LOG_DIR}/%(program_name)s.log
 stderr_logfile=${LOG_DIR}/%(program_name)s.log
 environment=RBENV_ROOT=${RBENV_ROOT}
