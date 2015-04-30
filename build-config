@@ -1,4 +1,0 @@
-#!/bin/sh
-
-INSTALL_DIR=/home/kandan
-RUN_USER=kandan
