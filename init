@@ -131,7 +131,7 @@ export HUBOT_KEY=`cat ${INSTALL_DIR}/kandan/hubot-key`
 appStart () {
   # notify hubot key
   echo -n "hubot key is: "
-  cat ${INSTALL_DIR}/kandna/hubot-key
+  cat ${INSTALL_DIR}/kandan/hubot-key
 
   # start supervisord
   exec /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
